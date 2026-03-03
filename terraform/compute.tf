@@ -58,7 +58,9 @@ resource "libvirt_domain" "k3s_nodes" {
 
   features = {
     acpi = true
-    apic = {}
+    apic = {
+
+    }
   }
 
   devices = {
