@@ -5,7 +5,6 @@ resource "libvirt_cloudinit_disk" "k3s_init_iso" {
   for_each = local.k3s
   name     = "${each.key}-iso"
 
-  # user_data handles users, ssh keys, and packages
   user_data = templatefile("${path.module}/cloud_init.cfg", {
     hostname = each.key
     fqdn     = "${each.key}.k3s.local"
@@ -14,7 +13,6 @@ resource "libvirt_cloudinit_disk" "k3s_init_iso" {
     sshkey   = var.ssh_public_key
   })
 
-  # meta_data is REQUIRED by this schema version
   meta_data = jsonencode({
     "instance-id"    = each.key
     "local-hostname" = each.key
@@ -55,14 +53,12 @@ resource "libvirt_domain" "k3s_nodes" {
     type         = "hvm"
     type_arch    = "x86_64"
     type_machine = "pc"
-    boot_devices = [{ dev = "hd" }] # Ensures it looks for the Hard Drive
+    boot_devices = [{ dev = "hd" }]
   }
 
   features = {
     acpi = true
-    apic = {
-      # This enables the Advanced Programmable Interrupt Controller
-    }
+    apic = {}
   }
 
   devices = {
@@ -83,7 +79,7 @@ resource "libvirt_domain" "k3s_nodes" {
           type = "qcow2"
         }
 
-        boot_order = "1" # <--- FORCE this to be the first boot device
+        boot_order = "1" # 
       },
       {
         device = "cdrom"
@@ -97,7 +93,7 @@ resource "libvirt_domain" "k3s_nodes" {
           dev = "sda"
           bus = "sata"
         }
-        boot_order = "2" # <--- Cloud-init is second
+        boot_order = "2"
       }
     ]
 
@@ -113,9 +109,6 @@ resource "libvirt_domain" "k3s_nodes" {
       }
     ]
 
-    # DELETED GRAPHICS BLOCK - This stops the "Element Vanished" error.
-
-    # Standard serial console configuration for 'virsh console'
     consoles = [
       {
         type        = "pty"
