@@ -1,3 +1,6 @@
+# ------------------------------------------------------------------------------
+# STORAGE POOL CONFIGURATION
+# ------------------------------------------------------------------------------
 resource "libvirt_pool" "k3s_pool" {
   name = "k3s-pool"
   type = "dir"
@@ -10,6 +13,9 @@ resource "libvirt_pool" "k3s_pool" {
   }
 }
 
+# ------------------------------------------------------------------------------
+# VOLUMES (BASE IMAGE & NODE DISKS)
+# ------------------------------------------------------------------------------
 resource "libvirt_volume" "k3s_base_volume" {
   name = "debian-12-base.qcow2"
   pool = libvirt_pool.k3s_pool.name
@@ -25,7 +31,6 @@ resource "libvirt_volume" "k3s_base_volume" {
       url = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
     }
   }
-  # capacity is automatically computed from Content-Length header
 }
 
 resource "libvirt_volume" "k3s_node_volume" {
