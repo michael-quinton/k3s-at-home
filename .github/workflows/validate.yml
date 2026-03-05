@@ -1,0 +1,27 @@
+name: Validate Infrastructure
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  terraform-validate:
+    runs-on: unbuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run : |
+          cd terraform
+          terraform init -backend=false
+
+      - name: terraform Validate
+        run: |
+          cd terraform
+          terraform validate
