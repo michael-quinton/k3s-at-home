@@ -1,0 +1,46 @@
+---
+- name: Prepare Ubuntu 24.04 Host
+  hosts: vm_host
+  connection: local
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+    
+    - name: Install virtualisation stack
+      apt:
+        name:
+          - qemu-kvm
+          - libvirt-daemon-system
+          - libvirt-clients
+          - libvirt-dev
+          - cloud-image-utils
+          - python3-libvirt
+          - python3-netaddr
+          - unzip
+          - make
+          - virt-manager
+        state: present
+
+    - name: Install terraform
+      ansible.builtin.unarchive:
+        src: "https://releases.hashicorp.com/terraform/1.14.6/terraform_1.14.6_linux_amd64.zip"
+        dest: /usr/bin/
+        mode: "0755"
+        remote_src: true
+
+    - name: Ensure libvirt services are active
+      systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - libvirtd.service
+        - libvirt-guests.service
+
+    - name: Fix permissions for Mike
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        groups: libvirt,kvm
+        append: yes
