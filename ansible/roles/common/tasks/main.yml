@@ -1,0 +1,25 @@
+---
+- name: Update apt cache and install dependencies
+  apt:
+    name: "{{ common_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Set timezone
+  timezone:
+    name: Europe/Berlin
+  notify: Restart cron
+
+- name: Configure /etc/hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy health check script
+  copy:
+    src: health_check.sh
+    dest: /usr/local/bin/health_check.sh
+    mode: '0755'

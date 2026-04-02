@@ -1,0 +1,15 @@
+---
+- name: Join worker to cluster
+  shell: >
+    curl -sfL {{ k3s_install_script }} |
+    K3S_URL=https://{{ k3s_master_ip }}:6443
+    K3S_TOKEN={{ hostvars[groups['master'][0]]['node_token']['content'] | b64decode | trim }}
+    sh -
+  args:
+    creates: /etc/rancher/k3s/config.yaml.d/
+
+- name: Ensure k3s-agent is started and enabled
+  systemd:
+    name: k3s-agent
+    state: started
+    enabled: yes
