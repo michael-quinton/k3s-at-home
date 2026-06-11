@@ -18,8 +18,8 @@
     group: root
     mode: '0644'
 
-- name: Copy health check script
-  copy:
-    src: health_check.sh
-    dest: /usr/local/bin/health_check.sh
-    mode: '0755'
+#- name: Copy health check script
+#  copy:
+#    src: health_check.sh
+#    dest: /usr/local/bin/health_check.sh
+#    mode: '0755'
