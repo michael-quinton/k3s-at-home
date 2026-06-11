@@ -18,7 +18,7 @@ test/*
 
 # === Ansible ===
 # If you use retry files
-/ansible/*
+#/ansible/*
 /python/*
 *.retry
 
