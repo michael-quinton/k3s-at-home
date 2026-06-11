@@ -21,7 +21,7 @@ resource "libvirt_network" "k3s_network" {
         for name, config in local.k3s : {
           name = name
           ip   = "10.17.3.${config.octetIP}"
-          mac  = format("52:54:00:00:01:%02x", config.octetIP)
+          mac  = format("52:54:00:00:00:%02x", config.octetIP)
         }
       ]
     }
