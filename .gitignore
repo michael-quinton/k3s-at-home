@@ -10,7 +10,7 @@
 terraform.tfvars
 
 # === Binaries & Large Files ===
-images/*
+#images/*
 test/*
 
 # The libvirt provider binary
