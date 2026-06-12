@@ -7,8 +7,8 @@
 
 - name: Set timezone
   timezone:
-    name: Europe/Berlin
-  notify: Restart cron
+    name: Europe/London
+  #notify: Restart cron
 
 - name: Configure /etc/hosts
   template:
